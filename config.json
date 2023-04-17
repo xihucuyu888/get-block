@@ -1,0 +1,7 @@
+{
+    "ETHURL":"https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+    "BTCURL":"https://api.blockcypher.com/v1/btc/test3",
+    "STXURL":"https://stacks-node-api.testnet.stacks.co",
+    "AVAXURL":"https://api.avax-test.network/ext/bc/C/rpc",
+    "MATICURL":"https://rpc-mumbai.maticvigil.com"
+}
