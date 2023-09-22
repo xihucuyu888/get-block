@@ -3,5 +3,6 @@
     "BTCURL":"https://api.blockcypher.com/v1/btc/test3",
     "STXURL":"https://stacks-node-api.testnet.stacks.co",
     "AVAXURL":"https://api.avax-test.network/ext/bc/C/rpc",
-    "MATICURL":"https://rpc-mumbai.maticvigil.com"
+    "MATICURL":"https://rpc-mumbai.maticvigil.com",
+    "ATOMURL":"https://rest.sentry-01.theta-testnet.polypore.xyz"
 }

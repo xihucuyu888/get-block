@@ -8,9 +8,23 @@ const ETHURL = config.ETHURL
 const STXURL = config.STXURL
 const AVAXURL = config.AVAXURL
 const MATICURL = config.MATICURL
+const ATOMURL = config.ATOMURL
 
 const sleepSeconds = (s) => {
   return new Promise((resolve) => setTimeout(resolve, s * 1000))
+}
+const getATOMBlockResult = async (indexOrHash) => {
+  let data, timestamp
+  console.log(indexOrHash)
+  data = (await axios.get(`${ATOMURL}/blocks/${indexOrHash}`)).data
+  timestamp = parseInt(moment(data.block.header.time).format('x'))
+  console.log(data.block.header.time,timestamp)
+  return timestamp
+}
+const getATOMlatestBlock = async () => {
+  const re = await axios.get(`${ATOMURL}/blocks/latest`)
+  const block = re?.data.block.header.height
+  return block
 }
 
 const getBTCBlockResult = async (indexOrHash) => {
@@ -101,6 +115,9 @@ const getLatestBlock = async (chain) => {
     case 'STX':
       blockNumber = await getSTXlatestBlock()
       break
+    case 'ATOM':
+      blockNumber = await getATOMlatestBlock()
+      break
   }
   return blockNumber
 }
@@ -113,6 +130,9 @@ const getBlock = async (chain, block) => {
       break
     case 'BTC':
       timestamp = (await getBTCBlockResult(block)).timestamp
+      break
+    case 'ATOM':
+      timestamp = (await getATOMBlockResult(block))
       break
     case 'AVAX':
     case 'MATIC':
@@ -150,14 +170,15 @@ const getBlockNumber = async (chain, timestamp, left = 100000, right) => {
 
 if (require.main === module) {
   const test = async () => {
-    const date = new Date('2023-04-17 15:00:00')
+    const date = new Date('2023-07-10 00:00:00')
     const timestamp = date.getTime()
     console.log('timestamp', timestamp)
     //await getBlockNumber('ETH', timestamp, 33907882)
-    await getBlockNumber('AVAX', timestamp, 20956326)
-    await getBlockNumber('MATIC', timestamp, 33907882)
+    //await getBlockNumber('AVAX', timestamp, 24019400)
+    //await getBlockNumber('MATIC', timestamp, 37777778)
     // await getBlockNumber('BTC', timestamp, 33907882)
     // await getBlockNumber('STX', timestamp, 33907882)
+    await getBlockNumber('ATOM', timestamp, 16840000)
   }
   test()
 }
