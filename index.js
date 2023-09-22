@@ -9,6 +9,7 @@ const STXURL = config.STXURL
 const AVAXURL = config.AVAXURL
 const MATICURL = config.MATICURL
 const ATOMURL = config.ATOMURL
+const LTCURL = config.LTCURL
 
 const sleepSeconds = (s) => {
   return new Promise((resolve) => setTimeout(resolve, s * 1000))
@@ -27,10 +28,19 @@ const getATOMlatestBlock = async () => {
   return block
 }
 
-const getBTCBlockResult = async (indexOrHash) => {
+const getBTCBlockResult = async (chain,indexOrHash) => {
   let data, timestamp
+  let URL
+  switch (chain) {
+    case 'BTC':
+      URL = BTCURL
+      break
+    case 'LTC':
+      URL = LTCURL
+      break
+  }
   if (typeof indexOrHash === 'number') {
-    data = (await axios.get(`${BTCURL}/block/${indexOrHash}`)).data
+    data = (await axios.get(`${URL}/block/${indexOrHash}`)).data
     timestamp = parseInt(moment(data.time).format('x'))
   }
   return {
@@ -38,13 +48,25 @@ const getBTCBlockResult = async (indexOrHash) => {
     timestamp: timestamp
   }
 }
-const getBTClatestBlock = async () => {
-  const re = await axios.get(`${BTCURL}/block/tip`)
+const getBTClatestBlock = async (chain) => {
+  let URL
+  switch (chain) {
+    case 'BTC':
+      URL = BTCURL
+      break
+    case 'LTC':
+      URL = LTCURL
+      break
+  }
+  console.log(`${URL}/block/tip`)
+  const re = await axios.get(`${URL}/block/tip`)
   const block = re?.data.height
+  console.log(block)
   return block
 }
 const getSTXlatestBlock = async () => {
   const re = await axios.get(`${STXURL}/extended/v1/block?limit=1`)
+  console.log(re?.data.results[0].height)
   return re?.data.results[0].height
 }
 
@@ -52,6 +74,7 @@ const getSTXBlockResult = async (indexOrHash) => {
   const re = await axios.get(`${STXURL}/extended/v1/block/by_height/${indexOrHash}`)
   const block = re?.data
   const timestamp = block.burn_block_time * 1000
+  console.log(indexOrHash)
   return timestamp
 }
 
@@ -110,7 +133,8 @@ const getLatestBlock = async (chain) => {
       blockNumber = await getETHlatestBlock(chain)
       break
     case 'BTC':
-      blockNumber = await getBTClatestBlock()
+    case 'LTC':
+      blockNumber = await getBTClatestBlock(chain)
       break
     case 'STX':
       blockNumber = await getSTXlatestBlock()
@@ -129,7 +153,8 @@ const getBlock = async (chain, block) => {
       timestamp = await getSTXBlockResult(block)
       break
     case 'BTC':
-      timestamp = (await getBTCBlockResult(block)).timestamp
+    case 'LTC':
+      timestamp = (await getBTCBlockResult(chain,block)).timestamp
       break
     case 'ATOM':
       timestamp = (await getATOMBlockResult(block))
@@ -170,15 +195,16 @@ const getBlockNumber = async (chain, timestamp, left = 100000, right) => {
 
 if (require.main === module) {
   const test = async () => {
-    const date = new Date('2023-07-10 00:00:00')
+    const date = new Date('2023-09-18 11:00:00')
     const timestamp = date.getTime()
     console.log('timestamp', timestamp)
     //await getBlockNumber('ETH', timestamp, 33907882)
     //await getBlockNumber('AVAX', timestamp, 24019400)
     //await getBlockNumber('MATIC', timestamp, 37777778)
-    // await getBlockNumber('BTC', timestamp, 33907882)
-    // await getBlockNumber('STX', timestamp, 33907882)
-    await getBlockNumber('ATOM', timestamp, 16840000)
+    //await getBlockNumber('BTC', timestamp, 33907882)
+    // await getBlockNumber('LTC', timestamp, 2952117)
+    //await getBlockNumber('STX', timestamp, 10000)
+    await getBlockNumber('ATOM', timestamp, 17950000)
   }
   test()
 }

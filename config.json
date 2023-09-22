@@ -4,5 +4,6 @@
     "STXURL":"https://stacks-node-api.testnet.stacks.co",
     "AVAXURL":"https://api.avax-test.network/ext/bc/C/rpc",
     "MATICURL":"https://rpc-mumbai.maticvigil.com",
-    "ATOMURL":"https://rest.sentry-01.theta-testnet.polypore.xyz"
+    "ATOMURL":"https://rest.sentry-01.theta-testnet.polypore.xyz",
+    "LTCURL":"https://testnet-node-new.nbltrust.com/ltc/api/LTC/testnet"
 }
