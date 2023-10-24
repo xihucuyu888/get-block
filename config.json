@@ -5,5 +5,8 @@
     "AVAXURL":"https://api.avax-test.network/ext/bc/C/rpc",
     "MATICURL":"https://rpc-mumbai.maticvigil.com",
     "ATOMURL":"https://rest.sentry-01.theta-testnet.polypore.xyz",
-    "LTCURL":"https://testnet-node-new.nbltrust.com/ltc/api/LTC/testnet"
+    "LTCURL":"https://testnet-node-new.nbltrust.com/ltc/api/LTC/testnet",
+    "ARBURL":"https://sepolia-rollup.arbitrum.io/rpc",
+    "DOTURL":"wss://westend-rpc.dwellir.com",
+    "OPURL":"https://api.opensea.io/api/v1/"
 }
