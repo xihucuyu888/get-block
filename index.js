@@ -14,6 +14,7 @@ const LTCURL = config.LTCURL
 const OPURL = config.OPURL
 const ARBURL = config.ARBURL
 const DOTURL = config.DOTURL
+const XRPURL = config.XRPURL
 let dotApi
 
 const sleepSeconds = (s) => {
@@ -42,6 +43,39 @@ const getDOTlatestBlock = async () => {
   await initPolkadot()
   const header = await dotApi.rpc.chain.getHeader()
   const block = header.number.toNumber()
+  return block
+}
+
+const getXRPblockResult = async (indexOrHash) => {
+  const data = {
+    "method": "ledger",
+    "params": [
+        {
+            "ledger_index": indexOrHash,
+            "accounts": false,
+            "full": false,
+            "transactions": false,
+            "expand": false,
+            "owner_funds": false
+        }
+    ]
+}
+
+const res = (await axios.post(`${XRPURL}`,data)).data
+const close_time_human = res.result.ledger.close_time_human
+const timestamp = moment.utc(close_time_human, "YYYY-MMM-DD HH:mm:ss.SSSSSSSSS Z").valueOf();
+return timestamp
+}
+
+const getXRPlatestBlock = async() => {
+  const data = {
+    "method": "server_state",
+    "params": [
+        {}
+    ]
+}
+  const res = (await axios.post(`${XRPURL}`,data)).data
+  const block = res.result.state.validated_ledger.seq
   return block
 }
 
@@ -185,6 +219,9 @@ const getLatestBlock = async (chain) => {
     case 'DOT':
       blockNumber = await getDOTlatestBlock()
       break
+    case 'XRP':
+      blockNumber = await getXRPlatestBlock()
+      break
   }
   return blockNumber
 }
@@ -211,6 +248,9 @@ const getBlock = async (chain, block) => {
       break
     case 'DOT':
       timestamp = await getDOTBlockResult(block)
+      break
+    case 'XRP':
+      timestamp = await getXRPblockResult(block)
       break
   }
   return timestamp
@@ -243,18 +283,19 @@ const getBlockNumber = async (chain, timestamp, left = 100000, right) => {
 
 if (require.main === module) {
   const test = async () => {
-    const date = new Date('2023-10-24 14:00:00')
+    const date = new Date('2023-11-17 13:00:00')
     const timestamp = date.getTime()
     console.log('timestamp', timestamp)
     //await getBlockNumber('ETH', timestamp, 33907882)
-    //await getBlockNumber('AVAX', timestamp, 24019400)
+    //await getBlockNumber('AVAX', timestamp, 27669731)
     //await getBlockNumber('MATIC', timestamp, 39963387)
     //await getBlockNumber('BTC', timestamp, 33907882)
     //await getBlockNumber('LTC', timestamp, 2941117)
     //await getBlockNumber('STX', timestamp, 10000)
-    //await getBlockNumber('ATOM', timestamp, 17851671)
-    await getBlockNumber('DOT', timestamp, 18001547)
+    //await getBlockNumber('ATOM', timestamp, 18755300)
+    //await getBlockNumber('DOT', timestamp, 18044162)
     //await getBlockNumber('ARB', timestamp, 10000)
+    await getBlockNumber('XRP', timestamp, 42954049)
   }
   test()
 }
