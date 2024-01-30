@@ -10,6 +10,7 @@ const STXURL = config.STXURL
 const AVAXURL = config.AVAXURL
 const MATICURL = config.MATICURL
 const ATOMURL = config.ATOMURL
+const APTURL = config.APTURL
 const LTCURL = config.LTCURL
 const OPURL = config.OPURL
 const ARBURL = config.ARBURL
@@ -88,6 +89,18 @@ const getATOMBlockResult = async (indexOrHash) => {
 const getATOMlatestBlock = async () => {
   const re = await axios.get(`${ATOMURL}/blocks/latest`)
   const block = re?.data.block.header.height
+  return block
+}
+
+const getAPTBlockResult = async (indexOrHash) => {
+  let data, timestamp
+  data = (await axios.get(`${APTURL}/blocks/by_height/${indexOrHash}`)).data
+  timestamp = parseInt(data.block_timestamp/1000)
+  return timestamp
+}
+const getAPTlatestBlock = async () => {
+  const re = await axios.get(`${APTURL}`)
+  const block = re?.data.block_height
   return block
 }
 
@@ -222,6 +235,9 @@ const getLatestBlock = async (chain) => {
     case 'XRP':
       blockNumber = await getXRPlatestBlock()
       break
+    case 'APT':
+      blockNumber = await getAPTlatestBlock()
+      break
   }
   return blockNumber
 }
@@ -251,6 +267,9 @@ const getBlock = async (chain, block) => {
       break
     case 'XRP':
       timestamp = await getXRPblockResult(block)
+      break
+    case 'APT':
+      timestamp = await getAPTBlockResult(block)
       break
   }
   return timestamp
@@ -283,7 +302,7 @@ const getBlockNumber = async (chain, timestamp, left = 100000, right) => {
 
 if (require.main === module) {
   const test = async () => {
-    const date = new Date('2023-11-17 13:00:00')
+    const date = new Date('2024-01-30 00:00:00')
     const timestamp = date.getTime()
     console.log('timestamp', timestamp)
     //await getBlockNumber('ETH', timestamp, 33907882)
@@ -295,7 +314,8 @@ if (require.main === module) {
     //await getBlockNumber('ATOM', timestamp, 18755300)
     //await getBlockNumber('DOT', timestamp, 18044162)
     //await getBlockNumber('ARB', timestamp, 10000)
-    await getBlockNumber('XRP', timestamp, 42954049)
+    // await getBlockNumber('XRP', timestamp, 42954049)
+    await getBlockNumber('APT', timestamp, 207104108)
   }
   test()
 }
