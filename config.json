@@ -9,5 +9,6 @@
     "ARBURL":"https://sepolia-rollup.arbitrum.io/rpc",
     "DOTURL":"wss://blockchains-mainnet.hashxdc.com/dot",
     "OPURL":"https://api.opensea.io/api/v1/",
-    "XRPURL":"https://s.altnet.rippletest.net:51234"
+    "XRPURL":"https://s.altnet.rippletest.net:51234",
+    "APTURL":"https://fullnode.testnet.aptoslabs.com/v1"
 }
