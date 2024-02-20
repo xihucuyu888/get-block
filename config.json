@@ -7,7 +7,7 @@
     "ATOMURL":"https://rest.sentry-01.theta-testnet.polypore.xyz",
     "LTCURL":"https://testnet.litecore.io",
     "ARBURL":"https://sepolia-rollup.arbitrum.io/rpc",
-    "DOTURL":"wss://blockchains-mainnet.hashxdc.com/dot",
+    "DOTURL":"",
     "OPURL":"https://api.opensea.io/api/v1/",
     "XRPURL":"https://s.altnet.rippletest.net:51234",
     "APTURL":"https://fullnode.testnet.aptoslabs.com/v1"
