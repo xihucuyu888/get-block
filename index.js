@@ -82,12 +82,12 @@ const getXRPlatestBlock = async() => {
 
 const getATOMBlockResult = async (indexOrHash) => {
   let data, timestamp
-  data = (await axios.get(`${ATOMURL}/blocks/${indexOrHash}`)).data
+  data = (await axios.get(`${ATOMURL}/cosmos/base/tendermint/v1beta1/blocks/${indexOrHash}`)).data
   timestamp = parseInt(moment(data.block.header.time).format('x'))
   return timestamp
 }
 const getATOMlatestBlock = async () => {
-  const re = await axios.get(`${ATOMURL}/blocks/latest`)
+  const re = await axios.get(`${ATOMURL}/cosmos/base/tendermint/v1beta1/blocks/latest`)
   const block = re?.data.block.header.height
   return block
 }
@@ -302,7 +302,7 @@ const getBlockNumber = async (chain, timestamp, left = 100000, right) => {
 
 if (require.main === module) {
   const test = async () => {
-    const date = new Date('2024-01-30 00:00:00')
+    const date = new Date('2024-03-05 00:00:00')
     const timestamp = date.getTime()
     console.log('timestamp', timestamp)
     //await getBlockNumber('ETH', timestamp, 33907882)
@@ -311,11 +311,11 @@ if (require.main === module) {
     //await getBlockNumber('BTC', timestamp, 33907882)
     //await getBlockNumber('LTC', timestamp, 2941117)
     //await getBlockNumber('STX', timestamp, 10000)
-    //await getBlockNumber('ATOM', timestamp, 18755300)
+    await getBlockNumber('ATOM', timestamp, 20529062)
     //await getBlockNumber('DOT', timestamp, 18044162)
     //await getBlockNumber('ARB', timestamp, 10000)
     // await getBlockNumber('XRP', timestamp, 42954049)
-    await getBlockNumber('APT', timestamp, 207104108)
+    //await getBlockNumber('APT', timestamp, 220607146)
   }
   test()
 }
