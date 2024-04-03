@@ -10,5 +10,8 @@
     "DOTURL":"",
     "OPURL":"https://api.opensea.io/api/v1/",
     "XRPURL":"https://s.altnet.rippletest.net:51234",
-    "APTURL":"https://fullnode.testnet.aptoslabs.com/v1"
+    "APTURL":"https://fullnode.testnet.aptoslabs.com/v1",
+    "TONURL":"https://fullnode-new.nbltrust.com/tonv2",
+    "TRXURL":"https://nile.trongrid.io"
+
 }

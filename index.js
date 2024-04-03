@@ -16,6 +16,8 @@ const OPURL = config.OPURL
 const ARBURL = config.ARBURL
 const DOTURL = config.DOTURL
 const XRPURL = config.XRPURL
+const TONURL = config.TONURL
+const TRXURL = config.TRXURL
 let dotApi
 
 const sleepSeconds = (s) => {
@@ -30,6 +32,54 @@ const initPolkadot = async () => {
   else {
     return dotApi
   }
+}
+const getTRXBlockResult = async (block) => {
+  const config = {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    url: TRXURL + `/walletsolidity/getblockbynum`,
+    data:{num:block}
+  }
+  const result = await axios(config)
+  return  result.data.block_header.raw_data.timestamp
+}
+
+const getTRXlatestBlock = async () => {
+  const config = {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    url: TRXURL + `/walletsolidity/getnowblock`
+  }
+  const result = await axios(config)
+  return result.data.block_header.raw_data.number
+}
+
+const getTONBlockResult = async (seqno) => {
+  const config = {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    url: TONURL + `/getBlockHeader?workchain=-1&shard=-9223372036854775808&seqno=${seqno}`
+  }
+  const result = await axios(config)
+  return result.data.result.gen_utime * 1000
+}
+
+const getTONlatestBlock = async () => {
+  const config = {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    url: TONURL + `/getMasterchainInfo`
+  }
+  const result = await axios(config)
+  return result.data.result.last.seqno
 }
 
 const getDOTBlockResult = async (indexOrHash) => {
@@ -238,6 +288,12 @@ const getLatestBlock = async (chain) => {
     case 'APT':
       blockNumber = await getAPTlatestBlock()
       break
+    case 'TON':
+      blockNumber = await getTONlatestBlock()
+      break
+      case 'TRX':
+      blockNumber = await getTRXlatestBlock()
+      break
   }
   return blockNumber
 }
@@ -271,6 +327,12 @@ const getBlock = async (chain, block) => {
     case 'APT':
       timestamp = await getAPTBlockResult(block)
       break
+    case 'TON':
+      timestamp = await getTONBlockResult(block)
+      break
+    case 'TRX':
+      timestamp = await getTRXBlockResult(block)
+      break
   }
   return timestamp
 }
@@ -302,7 +364,7 @@ const getBlockNumber = async (chain, timestamp, left = 100000, right) => {
 
 if (require.main === module) {
   const test = async () => {
-    const date = new Date('2024-03-05 00:00:00')
+    const date = new Date('2024-04-03 11:50:00')
     const timestamp = date.getTime()
     console.log('timestamp', timestamp)
     //await getBlockNumber('ETH', timestamp, 33907882)
@@ -311,11 +373,13 @@ if (require.main === module) {
     //await getBlockNumber('BTC', timestamp, 33907882)
     //await getBlockNumber('LTC', timestamp, 2941117)
     //await getBlockNumber('STX', timestamp, 10000)
-    await getBlockNumber('ATOM', timestamp, 20529062)
+    // await getBlockNumber('ATOM', timestamp, 20529062)
     //await getBlockNumber('DOT', timestamp, 18044162)
     //await getBlockNumber('ARB', timestamp, 10000)
     // await getBlockNumber('XRP', timestamp, 42954049)
     //await getBlockNumber('APT', timestamp, 220607146)
+    // await getBlockNumber('TON', timestamp, 37063250)
+   await getBlockNumber('TRX', timestamp, 45705261)
   }
   test()
 }
